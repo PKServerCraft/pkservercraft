@@ -1,0 +1,99 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "PK Server Craft",
+        "description": "A simple server management console using Digital Ocean specific designed for short-run servers. The intent is to define server patterns that can be deployed through saved images (for short-run, persistant servers) or through rolling server deployments.",
+        "version": "1.0.0"
+    },
+    "host": "localhost:8080",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "basePath": "/pkservercraft/v1",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/servers": {
+            "get": {
+                "summary": "Servers",
+                "description": "List the servers available for this configuration",
+                "tags": [
+                    "Servers"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An list of servers",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Server"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Server": {
+            "properties": {
+                "slug": {
+                    "type": "string"
+                },
+                "image": {
+                    "$ref": "#/definitions/Image"
+                },
+                "droplet": {
+                    "$ref": "#/definitions/Droplet"
+                },
+                "dns": {
+                    "type": "string"
+                }
+            }
+        },
+        "Image": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
+        "Droplet": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "ip_address": {
+                    "type": "string"
+                }
+            }
+        },
+        "Error": {
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
