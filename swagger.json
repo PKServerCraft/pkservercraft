@@ -40,9 +40,84 @@
                     }
                 }
             }
+        },
+        "/servers/{slug}": {
+            "get": {
+                "summary": "Servers",
+                "description": "List a server available in this configuration",
+                "tags": [
+                    "Servers"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "description": "Slug of server to be returned",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Servers by slug",
+                        "schema": {
+                            "$ref": "#/definitions/Server"
+                        }
+                    },
+                    "404": {
+                        "description": "Server not found"
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Servers",
+                "description": "Destroy an active server if available in this configuration",
+                "tags": [
+                    "Servers"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "description": "Slug of server to be destroyed",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Destruction in progress",
+                        "schema": {
+                            "$ref": "#/definitions/DestructionStatus"
+                        }
+                    },
+                    "204": {
+                        "description": "Server no longer active"
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "DestructionStatus": {
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "Server": {
             "properties": {
                 "slug": {

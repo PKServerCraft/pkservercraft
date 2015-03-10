@@ -40,6 +40,14 @@ function main() {
         });
     });
 
+    app.get(CONTEXT_ROOT + "/servers/:slug", function (request, response) {
+        serverManager.findServer(request.param("slug")).then(function (server) {
+            sendResponse(response, "server", "success", server);
+        }, function (error) {
+            sendError(response, error);
+        });
+    });
+
     app.listen(process.env.PORT || 8080);
 }
 
