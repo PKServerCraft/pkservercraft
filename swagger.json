@@ -17,8 +17,7 @@
     "paths": {
         "/servers": {
             "get": {
-                "summary": "Servers",
-                "description": "List the servers available for this configuration",
+                "summary": "List the servers available for this configuration",
                 "tags": [
                     "Servers"
                 ],
@@ -43,8 +42,7 @@
         },
         "/servers/{slug}": {
             "get": {
-                "summary": "Servers",
-                "description": "List a server available in this configuration",
+                "summary": "List a server available in this configuration",
                 "tags": [
                     "Servers"
                 ],
@@ -75,6 +73,48 @@
                     }
                 }
             },
+            "post": {
+                "summary": "Activate a server available in this configuration with a given image or deployment.  If a deployment ID is supplied, a new server will be created and old server removed.  Otherwise, an preconfigured image prefix will be used to build the server.",
+                "tags": [
+                    "Servers"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "description": "Slug of server to be returned",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "deployment-id",
+                        "description": "Identifier to be used with deployment system for the deployment artifact.",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Server is active"
+                    },
+                    "202": {
+                        "description": "Server creation in progress",
+                        "schema": {
+                            "$ref": "#/definitions/Status"
+                        }
+                    },
+                    "404": {
+                        "description": "Server configuration not found"
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "summary": "Servers",
                 "description": "Destroy an active server if available in this configuration",
@@ -94,7 +134,7 @@
                     "202": {
                         "description": "Destruction in progress",
                         "schema": {
-                            "$ref": "#/definitions/DestructionStatus"
+                            "$ref": "#/definitions/Status"
                         }
                     },
                     "204": {
@@ -111,7 +151,7 @@
         }
     },
     "definitions": {
-        "DestructionStatus": {
+        "Status": {
             "properties": {
                 "status": {
                     "type": "string"
