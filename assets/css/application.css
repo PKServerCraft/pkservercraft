@@ -23,3 +23,6 @@ body {
     display: block;
     float: left;
 }
+.navbar-inverse .navbar-nav>li>a {
+    color: #aaa;
+}
