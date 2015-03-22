@@ -27,6 +27,9 @@ function main() {
     var spMiddleware = stormpathExpressSdk.createMiddleware(SP_CONFIG),
         app = new Express();
 
+    app.use(Express["static"](ROOT_DIR));
+    app.use(CONTEXT_ROOT, Express['static'](ROOT_DIR));
+
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use(methodOverride());

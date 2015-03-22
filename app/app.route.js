@@ -10,12 +10,13 @@ app.config(['$stateProvider', '$urlRouterProvider',
                 url: "/",
                 templateUrl: "app/components/servers/view.html",
                 controller: "servers",
-                authenticate: true
+                sp: {
+                    authenticate: true
+                }
             }).state("login", {
                 url: "/login",
                 templateUrl: "app/components/login/view.html",
-                controller: "login",
-                authenticate: true
+                controller: "login"
             });
 
         $urlRouterProvider.otherwise("/");

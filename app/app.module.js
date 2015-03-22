@@ -31,7 +31,7 @@ app.run(['$http', '$rootScope', '$stormpath', '$q', 'STORMPATH_CONFIG',
         $rootScope.navbar = 'app/shared/navbar/view.html';
         $stormpath.uiRouter({
             loginState: 'login',
-            defaultPostLoginState: 'main'
+            defaultPostLoginState: 'servers'
         });
     }]);
 
