@@ -13,7 +13,11 @@
     <link href="assets/css/application.css" rel="stylesheet">
 
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/stormpath-sdk-angularjs/dist/stormpath-sdk-angularjs.min.js"></script>
+    <script src="bower_components/stormpath-sdk-angularjs/dist/stormpath-sdk-angularjs.tpls.min.js"></script>
     <script src="bower_components/ui-route/release/angular-ui-router.js"></script>
+
     <script src="app/app.module.js"></script>
     <script src="app/app.route.js"></script>
 
@@ -25,6 +29,8 @@
 
     <div class="container" role="main" ui-view>
     </div>
+
+    <a ui-sref="main" logout>logout</a>
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
