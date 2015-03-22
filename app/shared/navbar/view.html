@@ -11,8 +11,8 @@
         </div>
         <nav class="collapse navbar-collapse" role="navigation">
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="{{logout}}">
+                <li if-user>
+                    <a ui-sref="servers" logout>
                         <span class="glyphicon glyphicon-log-out"></span>
                         Logout
                     </a>

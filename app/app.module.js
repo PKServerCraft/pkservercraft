@@ -3,12 +3,14 @@
 
 var app = angular.module('pkservercraft', ['ngCookies', 'ui.router', 'stormpath', 'stormpath.templates']);
 
-var API = "http://localhost:8080/pkservercraft/api/v1";
+var CONTEXT_ROOT = "/pkservercraft";
+var API = CONTEXT_ROOT + "/api/v1";
 
 angular.module('stormpath.CONFIG', []).constant('STORMPATH_CONFIG', {
-    CURRENT_USER_URI: API + '/users/current',
-    USER_COLLECTION_URI: API + '/users',
-    DESTROY_SESSION_ENDPOINT: '/logout',
+    AUTHENTICATION_ENDPOINT: CONTEXT_ROOT + '/oauth/token',
+    CURRENT_USER_URI: CONTEXT_ROOT + '/users/current',
+    USER_COLLECTION_URI: CONTEXT_ROOT + '/users',
+    DESTROY_SESSION_ENDPOINT: CONTEXT_ROOT + '/logout',
     RESEND_EMAIL_VERIFICATION_ENDPOINT: API + '/verificationEmails',
     EMAIL_VERIFICATION_ENDPOINT: API + '/emailVerificationTokens',
     PASSWORD_RESET_TOKEN_COLLECTION_ENDPOINT: API + '/passwordResetTokens',

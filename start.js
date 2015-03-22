@@ -18,7 +18,15 @@ var SP_CONFIG = {
     appHref: process.env.STORMPATH_APP_HREF,
     apiKeyId: process.env.STORMPATH_API_KEY_ID,
     apiKeySecret: process.env.STORMPATH_API_KEY_SECRET,
-    allowedOrigins: ['http://development.paulkimbrel.com:8080']
+    writeAccessTokenResponse: true,
+    allowedOrigins: ['http://www-dev.paulkimbrel.com'],
+    tokenEndpoint: CONTEXT_ROOT + "/oauth/token",
+    logoutEndpoint: CONTEXT_ROOT + "/logout",
+    userCollectionEndpoint: CONTEXT_ROOT + "/users",
+    currentUserEndpoint: CONTEXT_ROOT + "/users/current",
+    resendEmailVerificationEndpoint: CONTEXT_ROOT + "/verificationEmails",
+    emailVerificationTokenCollectionEndpoint: CONTEXT_ROOT + "/verificationEmails",
+    passwordResetTokenCollectionEndpoint: CONTEXT_ROOT + "/passwordResetTokens"
 };
 
 function main() {
