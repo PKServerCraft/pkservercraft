@@ -43,8 +43,8 @@ function main() {
     app.use(methodOverride());
     app.use(cookieParser());
 
-    app.use(spMiddleware);
     spMiddleware.attachDefaults(app);
+    app.use(spMiddleware);
 
     function sendResponse(response, type, message, object) {
         response.set('Content-Type', 'application/json').send(object);
