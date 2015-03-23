@@ -1,10 +1,11 @@
 /*global app */
 /*jslint */
 
-app.config(['$stateProvider', '$urlRouterProvider',
-    function ($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
+    function ($stateProvider, $locationProvider, $urlRouterProvider) {
         'use strict';
 
+        //$locationProvider.html5Mode(true);
         $stateProvider
             .state("servers", {
                 url: "/",
@@ -21,6 +22,10 @@ app.config(['$stateProvider', '$urlRouterProvider',
                 url: "/passwordResetRequest",
                 templateUrl: "app/components/passwordResetRequest/view.html",
                 controller: "passwordResetRequest"
+            }).state("passwordReset", {
+                url: "/passwordReset?sptoken",
+                templateUrl: "app/components/passwordReset/view.html",
+                controller: "passwordReset"
             });
 
         $urlRouterProvider.otherwise("/");
