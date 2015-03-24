@@ -43,7 +43,7 @@ function main() {
     app.use(methodOverride());
     app.use(cookieParser());
 
-    app.use(CONTEXT_ROOT + '/passwordReset', function(req, res, next) {
+    app.use(CONTEXT_ROOT + '/passwordReset', function (req, res, next) {
         var sptoken = req.query.sptoken;
         res.status(302).set('location', CONTEXT_ROOT + '/#/passwordReset?sptoken=' + sptoken).send();
     });

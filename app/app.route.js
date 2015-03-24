@@ -16,16 +16,13 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
                 }
             }).state("login", {
                 url: "/login",
-                templateUrl: "app/components/login/view.html",
-                controller: "login"
+                templateUrl: "app/components/login/view.html"
             }).state("passwordResetRequest", {
                 url: "/passwordResetRequest",
-                templateUrl: "app/components/passwordResetRequest/view.html",
-                controller: "passwordResetRequest"
+                templateUrl: "app/components/passwordResetRequest/view.html"
             }).state("passwordReset", {
                 url: "/passwordReset?sptoken",
-                templateUrl: "app/components/passwordReset/view.html",
-                controller: "passwordReset"
+                templateUrl: "app/components/passwordReset/view.html"
             });
 
         $urlRouterProvider.otherwise("/");
