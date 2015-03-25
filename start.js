@@ -19,7 +19,7 @@ var SP_CONFIG = {
     apiKeyId: process.env.STORMPATH_API_KEY_ID,
     apiKeySecret: process.env.STORMPATH_API_KEY_SECRET,
     writeAccessTokenResponse: true,
-    allowedOrigins: ['http://www-dev.paulkimbrel.com'],
+    allowedOrigins: ['http://www-dev.paulkimbrel.com', 'http://localhost:9000'],
     tokenEndpoint: CONTEXT_ROOT + "/oauth/token",
     logoutEndpoint: CONTEXT_ROOT + "/logout",
     userCollectionEndpoint: CONTEXT_ROOT + "/users",
@@ -56,12 +56,17 @@ function main() {
     }
 
     function sendError(response, error) {
-        var retVal = {
+        var status=500,
+            retVal = {
             "type" : "error",
             "message" : error.message
         };
+        
+        if (error.status != undefined) {
+            status = error.status
+        }
 
-        response.set('Content-Type', 'application/json').status(500).send(retVal);
+        response.set('Content-Type', 'application/json').status(status).send(retVal);
     }
 
     app.get(API_ROOT + "/servers", spMiddleware.authenticate, function (request, response) {
@@ -79,6 +84,7 @@ function main() {
             sendError(response, error);
         });
     });
+    
 
     app.listen(process.env.PORT || 8080);
 }
