@@ -7,12 +7,7 @@ var serverManager = require('./lib/ServerManager');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var cookieParser = require('cookie-parser');
-
-//Constants
-var ROOT_DIR = process.env.ROOT_DIR;
-
-var CONTEXT_ROOT = process.env.CONTEXT_ROOT || "/pkservercraft";
-var API_ROOT = CONTEXT_ROOT + "/api/v1";
+var config = require('./lib/ConfigurationManager').configuration;
 
 var SP_CONFIG = {
     appHref: process.env.STORMPATH_APP_HREF,
@@ -20,32 +15,33 @@ var SP_CONFIG = {
     apiKeySecret: process.env.STORMPATH_API_KEY_SECRET,
     writeAccessTokenResponse: true,
     allowedOrigins: ['http://www-dev.paulkimbrel.com', 'http://localhost:9000'],
-    tokenEndpoint: CONTEXT_ROOT + "/oauth/token",
-    logoutEndpoint: CONTEXT_ROOT + "/logout",
-    userCollectionEndpoint: CONTEXT_ROOT + "/users",
-    currentUserEndpoint: CONTEXT_ROOT + "/users/current",
-    resendEmailVerificationEndpoint: CONTEXT_ROOT + "/verificationEmails",
-    emailVerificationTokenCollectionEndpoint: CONTEXT_ROOT + "/verificationEmails",
-    passwordResetTokenCollectionEndpoint: CONTEXT_ROOT + "/passwordResetTokens"
+    tokenEndpoint: config.CONTEXT_ROOT + "/oauth/token",
+    logoutEndpoint: config.CONTEXT_ROOT + "/logout",
+    userCollectionEndpoint: config.CONTEXT_ROOT + "/users",
+    currentUserEndpoint: config.CONTEXT_ROOT + "/users/current",
+    resendEmailVerificationEndpoint: config.CONTEXT_ROOT + "/verificationEmails",
+    emailVerificationTokenCollectionEndpoint: config.CONTEXT_ROOT + "/verificationEmails",
+    passwordResetTokenCollectionEndpoint: config.CONTEXT_ROOT + "/passwordResetTokens"
 };
 
 function main() {
     "use strict";
 
     var spMiddleware = stormpathExpressSdk.createMiddleware(SP_CONFIG),
-        app = new Express();
+        app = new Express(),
+        api_path = config.CONTEXT_ROOT + config.API_ROOT;
 
-    app.use(Express["static"](ROOT_DIR));
-    app.use(CONTEXT_ROOT, Express['static'](ROOT_DIR));
+    app.use(Express["static"](config.ROOT_DIR));
+    app.use(config.CONTEXT_ROOT, Express['static'](config.ROOT_DIR));
 
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use(methodOverride());
     app.use(cookieParser());
 
-    app.use(CONTEXT_ROOT + '/passwordReset', function (req, res, next) {
+    app.use(config.CONTEXT_ROOT + '/passwordReset', function (req, res, next) {
         var sptoken = req.query.sptoken;
-        res.status(302).set('location', CONTEXT_ROOT + '/#/passwordReset?sptoken=' + sptoken).send();
+        res.status(302).set('location', config.CONTEXT_ROOT + '/#/passwordReset?sptoken=' + sptoken).send();
     });
 
     spMiddleware.attachDefaults(app);
@@ -56,20 +52,20 @@ function main() {
     }
 
     function sendError(response, error) {
-        var status=500,
+        var status = 500,
             retVal = {
-            "type" : "error",
-            "message" : error.message
-        };
+                "type" : "error",
+                "message" : error.message
+            };
         
-        if (error.status != undefined) {
-            status = error.status
+        if (error.status !== undefined) {
+            status = error.status;
         }
 
         response.set('Content-Type', 'application/json').status(status).send(retVal);
     }
 
-    app.get(API_ROOT + "/servers", spMiddleware.authenticate, function (request, response) {
+    app.get(api_path + "/servers", spMiddleware.authenticate, function (request, response) {
         serverManager.listServers().then(function (servers) {
             sendResponse(response, "servers", "success", servers);
         }, function (error) {
@@ -77,7 +73,7 @@ function main() {
         });
     });
 
-    app.get(API_ROOT + "/servers/:slug", spMiddleware.authenticate, function (request, response) {
+    app.get(api_path + "/servers/:slug", spMiddleware.authenticate, function (request, response) {
         serverManager.findServer(request.param("slug")).then(function (server) {
             sendResponse(response, "server", "success", server);
         }, function (error) {
