@@ -1,16 +1,19 @@
 /*jslint node: true,nomen: true */
-/*globals exports, describe, it */
+/*globals exports, after, describe, it */
 
 "use strict";
 
 var assert = require("assert");
-var mapper = require("../../lib/mappers/ServerMapper");
+var mapper = require('../../lib/mappers/ServerMapper');
+var config = require("../../lib/ConfigurationManager");
+var sinon = require("sinon");
 
 var images = require("./data/images");
 var droplets = require("./data/droplets");
 
 describe('Server Mapper', function () {
-	describe('Before creating anything', function () {
+    sinon.stub(config, 'HOST', function() { return "example.com"; });
+    describe('Before creating anything', function () {
 		var result = mapper.map("test1", [], []);
 		it('should find NO image or droplet', function () {
             assert.equal(undefined, result.droplet.id);
