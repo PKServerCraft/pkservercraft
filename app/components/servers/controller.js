@@ -4,11 +4,21 @@
 app.controller('servers', function ($scope, $http) {
     "use strict";
 
-    $http.get('/pkservercraft/api/v1/servers')
-        .success(function (data, status, headers, config) {
-           $scope.servers = data;
-        })
-        .error(function (data, status, headers, config) {
-            console.log("ERROR: " + data);
-        })
+    function refresh() {
+        $scope.loading = true;
+        $http.get('/pkservercraft/api/v1/servers')
+            .success(function (data, status, headers, config) {
+                $scope.loading = false;
+                $scope.servers = data;
+            })
+            .error(function (data, status, headers, config) {
+                $scope.loading = false;
+                //console.log("ERROR: " + data);
+            });
+    }
+
+    $scope.loading = false;
+    $scope.refresh = refresh;
+
+    refresh();
 });
