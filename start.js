@@ -7,7 +7,7 @@ var serverManager = require('./lib/ServerManager');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var cookieParser = require('cookie-parser');
-var config = require('./lib/ConfigurationManager').configuration;
+var settings = require('./lib/SettingsManager').settings;
 
 var SP_CONFIG = {
     appHref: process.env.STORMPATH_APP_HREF,
@@ -15,13 +15,13 @@ var SP_CONFIG = {
     apiKeySecret: process.env.STORMPATH_API_KEY_SECRET,
     writeAccessTokenResponse: true,
     allowedOrigins: ['http://www-dev.paulkimbrel.com', 'http://localhost:9000'],
-    tokenEndpoint: config.CONTEXT_ROOT + "/oauth/token",
-    logoutEndpoint: config.CONTEXT_ROOT + "/logout",
-    userCollectionEndpoint: config.CONTEXT_ROOT + "/users",
-    currentUserEndpoint: config.CONTEXT_ROOT + "/users/current",
-    resendEmailVerificationEndpoint: config.CONTEXT_ROOT + "/verificationEmails",
-    emailVerificationTokenCollectionEndpoint: config.CONTEXT_ROOT + "/verificationEmails",
-    passwordResetTokenCollectionEndpoint: config.CONTEXT_ROOT + "/passwordResetTokens"
+    tokenEndpoint: settings.CONTEXT_ROOT + "/oauth/token",
+    logoutEndpoint: settings.CONTEXT_ROOT + "/logout",
+    userCollectionEndpoint: settings.CONTEXT_ROOT + "/users",
+    currentUserEndpoint: settings.CONTEXT_ROOT + "/users/current",
+    resendEmailVerificationEndpoint: settings.CONTEXT_ROOT + "/verificationEmails",
+    emailVerificationTokenCollectionEndpoint: settings.CONTEXT_ROOT + "/verificationEmails",
+    passwordResetTokenCollectionEndpoint: settings.CONTEXT_ROOT + "/passwordResetTokens"
 };
 
 function main() {
@@ -29,19 +29,19 @@ function main() {
 
     var spMiddleware = stormpathExpressSdk.createMiddleware(SP_CONFIG),
         app = new Express(),
-        api_path = config.CONTEXT_ROOT + config.API_ROOT;
+        api_path = settings.CONTEXT_ROOT + settings.API_ROOT;
 
-    app.use(Express["static"](config.ROOT_DIR));
-    app.use(config.CONTEXT_ROOT, Express['static'](config.ROOT_DIR));
+    app.use(Express["static"](settings.ROOT_DIR));
+    app.use(settings.CONTEXT_ROOT, Express['static'](settings.ROOT_DIR));
 
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use(methodOverride());
     app.use(cookieParser());
 
-    app.use(config.CONTEXT_ROOT + '/passwordReset', function (req, res, next) {
+    app.use(settings.CONTEXT_ROOT + '/passwordReset', function (req, res, next) {
         var sptoken = req.query.sptoken;
-        res.status(302).set('location', config.CONTEXT_ROOT + '/#/passwordReset?sptoken=' + sptoken).send();
+        res.status(302).set('location', settings.CONTEXT_ROOT + '/#/passwordReset?sptoken=' + sptoken).send();
     });
 
     spMiddleware.attachDefaults(app);

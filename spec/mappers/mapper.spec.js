@@ -3,7 +3,7 @@
 
 "use strict";
 
-require("../../lib/ConfigurationManager").forceDefaults();
+require("../../lib/SettingsManager").forceDefaults();
 
 var assert = require("assert");
 var mapper = require('../../lib/mappers/ServerMapper');
