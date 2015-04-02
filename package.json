@@ -30,6 +30,6 @@
         "sinon": "^1.14.1"
     },
     "scripts": {
-        "test": "./node_modules/mocha/bin/mocha spec/**/*.spec.js"
+        "test": "grunt test"
     }
 }
