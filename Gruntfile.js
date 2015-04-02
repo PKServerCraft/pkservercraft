@@ -6,7 +6,10 @@
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        clean: ['dist', 'coverage'],
+        clean: {
+            pre: ['dist', 'coverage'],
+            post: [ 'dist/server' ]
+        },
         copy: {
             lib: {
                 expand: true,
@@ -19,6 +22,20 @@ module.exports = function (grunt) {
                 cwd: '.',
                 src: 'start.js',
                 dest: 'dist/server/'
+            }
+        },
+        compress: {
+            main: {
+                options: {
+                    archive: 'dist/pkservercraft-api.zip'
+                },
+                files: [
+                    {
+                        cwd: 'dist/server/',
+                        src: ['**/*'],
+                        dest: '/'
+                    }
+                ]
             }
         },
         mochaTest: {
@@ -45,9 +62,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-mocha-test');
 
     grunt.registerTask('test', 'mochaTest');
-    grunt.registerTask('install', ['clean', 'mochaTest', 'copy']);
+    grunt.registerTask('build', ['test', 'copy']);
+    grunt.registerTask('package', ['compress', 'clean:post']);
+
+    grunt.registerTask('install', ['clean:pre', 'build', 'package']);
 };
