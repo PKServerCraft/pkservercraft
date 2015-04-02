@@ -1,0 +1,22 @@
+
+[0m[0m
+[0m  Server Mapper[0m
+[0m    Before creating anything[0m
+[2K[0G    [32m  ✓[0m[90m should find NO image or droplet [0m
+[2K[0G    [32m  ✓[0m[90m should still have standard information [0m
+[0m    Server stopped, image sitting in waiting[0m
+[2K[0G    [32m  ✓[0m[90m should have no droplet [0m
+[2K[0G    [32m  ✓[0m[90m should have an image [0m
+[2K[0G    [32m  ✓[0m[90m should have standard information [0m
+[0m    Server stopped, duplicate images[0m
+[2K[0G    [32m  ✓[0m[90m should have no droplet [0m
+[2K[0G    [32m  ✓[0m[90m should have the newest image [0m
+[2K[0G    [32m  ✓[0m[90m should have standard information [0m
+[0m    Server running, no images[0m
+[2K[0G    [32m  ✓[0m[90m should have no images [0m
+[2K[0G    [32m  ✓[0m[90m should have the an active droplet [0m
+[2K[0G    [32m  ✓[0m[90m should have standard information [0m
+
+
+[92m [0m[32m 11 passing[0m[90m (16ms)[0m
+
