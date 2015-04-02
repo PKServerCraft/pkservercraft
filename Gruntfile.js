@@ -8,13 +8,24 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         clean: ['dist', 'coverage'],
         copy: {
-
+            lib: {
+                expand: true,
+                cwd: 'lib',
+                src: '**',
+                dest: 'dist/server/lib'
+            },
+            start: {
+                expand: true,
+                cwd: '.',
+                src: 'start.js',
+                dest: 'dist/server/'
+            }
         },
         mochaTest: {
             test: {
                 options: {
                     reporter: 'spec',
-                    captureFile: 'results.txt', // Optionally capture the reporter output to a file
+                    //captureFile: 'results.txt', // Optionally capture the reporter output to a file
                     quiet: false, // Optionally suppress output to standard out (defaults to false)
                     clearRequireCache: false // Optionally clear the require cache before running tests (defaults to false)
                 },
@@ -29,10 +40,14 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-mocha-test');
 
     grunt.registerTask('test', 'mochaTest');
-    grunt.registerTask('clean', 'clean');
-    grunt.registerTask('install', ['']);
+    grunt.registerTask('install', ['clean', 'mochaTest', 'copy']);
 };
