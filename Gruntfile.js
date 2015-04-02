@@ -27,7 +27,7 @@ module.exports = function (grunt) {
         compress: {
             main: {
                 options: {
-                    archive: 'dist/pkservercraft-api.zip'
+                    archive: 'dist/<%= pkg.name %>-api.zip'
                 },
                 files: [
                     {
