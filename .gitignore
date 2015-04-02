@@ -5,3 +5,4 @@ coverage
 .c9
 data
 dist
+.DS_Store
