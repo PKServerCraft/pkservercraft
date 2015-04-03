@@ -7,6 +7,8 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         buildNumber: process.env.TRAVIS_BUILD_NUMBER || "SNAPSHOT",
+        AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+        AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
         clean: {
             pre: ['dist', 'coverage'],
             post: [ 'dist/server' ]
@@ -27,6 +29,8 @@ module.exports = function (grunt) {
         },
         aws_s3: {
             options: {
+                accessKeyId: '<%= AWS_ACCESS_KEY_ID %>', // Use the variables
+                secretAccessKey: '<%= AWS_SECRET_ACCESS_KEY %>', // You can also use env variables
                 region: 'us-east-1',
                 uploadConcurrency: 5,
                 downloadConcurrency: 5,
