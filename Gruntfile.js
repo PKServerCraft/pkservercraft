@@ -6,6 +6,7 @@
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        buildNumber: process.env.TRAVIS_BUILD_NUMBER || "SNAPSHOT",
         clean: {
             pre: ['dist', 'coverage'],
             post: [ 'dist/server' ]
@@ -24,10 +25,28 @@ module.exports = function (grunt) {
                 dest: 'dist/server/'
             }
         },
+        aws_s3: {
+            options: {
+                region: 'us-east-1',
+                uploadConcurrency: 5,
+                downloadConcurrency: 5,
+                bucket: 'deployment.paulkimbrel.com'
+            },
+            deploy: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'dist/',
+                        src: ['**'],
+                        dest: '/'
+                    }
+                ]
+            }
+        },
         compress: {
             main: {
                 options: {
-                    archive: 'dist/<%= pkg.name %>-api.zip'
+                    archive: 'dist/<%= pkg.name %>/<%= pkg.version %>-<%= buildNumber %>/<%= pkg.name %>-api.zip'
                 },
                 files: [
                     {
@@ -64,6 +83,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-aws-s3');
     grunt.loadNpmTasks('grunt-mocha-test');
 
     grunt.registerTask('test', 'mochaTest');
@@ -71,4 +91,5 @@ module.exports = function (grunt) {
     grunt.registerTask('package', ['compress', 'clean:post']);
 
     grunt.registerTask('install', ['clean:pre', 'build', 'package']);
+    grunt.registerTask('deploy', 'aws_s3');
 };
