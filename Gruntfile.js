@@ -1,12 +1,28 @@
 /*jslint node: true,nomen: true */
-/*globals module */
+/*globals module,pkg */
 
 "use strict";
 
 module.exports = function (grunt) {
+    var pkg = grunt.file.readJSON('package.json');
+    function buildVersion() {
+        var retVal = pkg.version,
+            buildNumber = process.env.TRAVIS_BUILD_NUMBER;
+
+        if (buildNumber === undefined) {
+            buildNumber = "SNAPSHOT";
+        }
+
+        if ((process.env.TRAVIS_BRANCH === "master") || (buildNumber === "SNAPSHOT")) {
+            retVal += ((buildNumber === "SNAPSHOT") ? "-" : "-build") + buildNumber;
+        } else {
+            retVal += "-dev" + buildNumber;
+        }
+
+        return retVal;
+    }
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
-        buildNumber: process.env.TRAVIS_BUILD_NUMBER || "SNAPSHOT",
+        pkg: pkg,
         AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
         AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
         clean: {
@@ -50,7 +66,7 @@ module.exports = function (grunt) {
         compress: {
             main: {
                 options: {
-                    archive: 'dist/<%= pkg.name %>/<%= pkg.version %>-<%= buildNumber %>/<%= pkg.name %>-api.zip'
+                    archive: 'dist/<%= pkg.name %>/' + buildVersion() + '/<%= pkg.name %>-api.zip'
                 },
                 files: [
                     {
