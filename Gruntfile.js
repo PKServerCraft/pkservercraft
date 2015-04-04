@@ -1,11 +1,30 @@
 /*jslint node: true,nomen: true */
-/*globals module */
+/*globals module,pkg */
 
 "use strict";
 
 module.exports = function (grunt) {
+    var pkg = grunt.file.readJSON('package.json');
+    function buildVersion() {
+        var retVal = pkg.version,
+            buildNumber = process.env.TRAVIS_BUILD_NUMBER;
+
+        if (buildNumber === undefined) {
+            buildNumber = "SNAPSHOT";
+        }
+
+        if ((process.env.TRAVIS_BRANCH === "master") || (buildNumber === "SNAPSHOT")) {
+            retVal += ((buildNumber === "SNAPSHOT") ? "-" : "-build") + buildNumber;
+        } else {
+            retVal += "-dev" + buildNumber;
+        }
+
+        return retVal;
+    }
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
+        pkg: pkg,
+        AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+        AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
         clean: {
             pre: ['dist', 'coverage'],
             post: [ 'dist/server' ]
@@ -24,10 +43,30 @@ module.exports = function (grunt) {
                 dest: 'dist/server/'
             }
         },
+        aws_s3: {
+            options: {
+                accessKeyId: '<%= AWS_ACCESS_KEY_ID %>', // Use the variables
+                secretAccessKey: '<%= AWS_SECRET_ACCESS_KEY %>', // You can also use env variables
+                region: 'us-east-1',
+                uploadConcurrency: 5,
+                downloadConcurrency: 5,
+                bucket: 'deployment.paulkimbrel.com'
+            },
+            deploy: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'dist/',
+                        src: ['**'],
+                        dest: '/'
+                    }
+                ]
+            }
+        },
         compress: {
             main: {
                 options: {
-                    archive: 'dist/<%= pkg.name %>-api.zip'
+                    archive: 'dist/<%= pkg.name %>/' + buildVersion() + '/<%= pkg.name %>-api.zip'
                 },
                 files: [
                     {
@@ -64,6 +103,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-aws-s3');
     grunt.loadNpmTasks('grunt-mocha-test');
 
     grunt.registerTask('test', 'mochaTest');
@@ -71,4 +111,5 @@ module.exports = function (grunt) {
     grunt.registerTask('package', ['compress', 'clean:post']);
 
     grunt.registerTask('install', ['clean:pre', 'build', 'package']);
+    grunt.registerTask('deploy', 'aws_s3');
 };

@@ -4,4 +4,9 @@ node_js:
 before_install: npm install -g grunt-cli
 install: npm install
 script: grunt install
-after_success: grunt deploy
+after_success:
+    - grunt deploy
+branches:
+  only:
+    - master
+    - development
