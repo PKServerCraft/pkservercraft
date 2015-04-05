@@ -2,13 +2,10 @@
 <div class="page-header">
     <h3>Deployables</h3>
 </div>
-<table class="table" ng-controller="deployables">
-    <tr>
-        <th>Deployable <span ng-hide="loading">(<a href ng-click="refresh()">refresh</a>)</span> <img src="assets/css/loading-sml.gif" ng-show="loading"></th>
-    </tr>
-    <tr ng-repeat="deployable in deployables">
-        <td>{{deployable.slug}}</td>
-    </tr>
-</table>
+<span ng-hide="loading">(<a href ng-click="refresh()">refresh</a>)</span> <img src="assets/css/loading-sml.gif" ng-show="loading">
+<div class="row">
+    <div class="col-md-4"><abn-tree tree-data="deployables_tree"></abn-tree></div>
+    <div class="col-md-8"></div>
+</div>
 <div class="alert alert-success" role="alert" ng-show="message">{{message}}</div>
 <div class="alert alert-danger" role="alert" ng-show="error">{{error}}</div>

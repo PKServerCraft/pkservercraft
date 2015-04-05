@@ -1,7 +1,7 @@
 /*global angular */
 /*jslint */
 
-var app = angular.module('pkservercraft', ['ngCookies', 'ui.router', 'stormpath', 'stormpath.templates']);
+var app = angular.module('pkservercraft', ['ngCookies', 'ui.router', 'stormpath', 'stormpath.templates', 'angularBootstrapNavTree']);
 
 var CONTEXT_ROOT = "/pkservercraft";
 var API = CONTEXT_ROOT + "/api/v1";
