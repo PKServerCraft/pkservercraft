@@ -7,4 +7,6 @@ app.controller('navbar', function ($scope, $state, STORMPATH_CONFIG) {
     $scope.$on(STORMPATH_CONFIG.SESSION_END_EVENT, function () {
         $state.go($state.current, {}, {reload: true});
     });
+    
+    $scope.$state = $state;
 });

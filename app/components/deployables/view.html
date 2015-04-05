@@ -1,0 +1,14 @@
+<ng-include src="navbar"></ng-include>
+<div class="page-header">
+    <h3>Deployables</h3>
+</div>
+<table class="table" ng-controller="deployables">
+    <tr>
+        <th>Deployable <span ng-hide="loading">(<a href ng-click="refresh()">refresh</a>)</span> <img src="assets/css/loading-sml.gif" ng-show="loading"></th>
+    </tr>
+    <tr ng-repeat="deployable in deployables">
+        <td>{{deployable.slug}}</td>
+    </tr>
+</table>
+<div class="alert alert-success" role="alert" ng-show="message">{{message}}</div>
+<div class="alert alert-danger" role="alert" ng-show="error">{{error}}</div>

@@ -10,6 +10,14 @@
             <a class="navbar-brand" href="#">Server Control</a>
         </div>
         <nav class="collapse navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav" if-user>
+                <li ng-class="{active: $state.includes('servers')}">
+                    <a href="#/">Servers</a>
+                </li>
+                <li ng-class="{active: $state.includes('deployables')}">
+                    <a href="#/deployables">Deployables</a>
+                </li>
+            </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li if-user>
                     <a ui-sref="servers" logout>

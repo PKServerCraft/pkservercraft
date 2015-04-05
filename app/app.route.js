@@ -14,6 +14,13 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
                 sp: {
                     authenticate: true
                 }
+            }).state("deployables", {
+                url: "/deployables",
+                templateUrl: "app/components/deployables/view.html",
+                controller: "deployables",
+                sp: {
+                    authenticate: true
+                }
             }).state("login", {
                 url: "/login",
                 templateUrl: "app/components/login/view.html"
