@@ -5,16 +5,82 @@
         "description": "A simple server management console using Digital Ocean specific designed for short-run servers. The intent is to define server patterns that can be deployed through saved images (for short-run, persistant servers) or through rolling server deployments.",
         "version": "1.0.0"
     },
-    "host": "localhost:8080",
+    "host": "www-dev.paulkimbrel.com",
     "schemes": [
         "http",
         "https"
     ],
-    "basePath": "/pkservercraft/v1",
+    "basePath": "/pkservercraft/api/v1",
     "produces": [
         "application/json"
     ],
     "paths": {
+        "/deployables": {
+            "get": {
+                "summary": "List the deployables available for this configuration",
+                "tags": [
+                    "Deployables"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of deployable images available for this configuration",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Deployable"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/deployables/{slug}/{version}": {
+            "delete": {
+                "summary": "Deletes a specific version of a deployable",
+                "tags": [
+                    "Deployables"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "description": "Slug of deployable to be destroyed",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "version",
+                        "description": "Version of deployable to be destroyed",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Destruction in progress",
+                        "schema": {
+                            "$ref": "#/definitions/Status"
+                        }
+                    },
+                    "204": {
+                        "description": "Version no longer exists"
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/servers": {
             "get": {
                 "summary": "List the servers available for this configuration",
@@ -36,6 +102,33 @@
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "sp_auth": []
+                    }
+                ]
+            },
+            "post": {
+                "summary": "Add a new server to this configuration",
+                "tags": [
+                    "Servers"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Configuration updated"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Updates a server to this configuration",
+                "tags": [
+                    "Servers"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Configuration updated"
                     }
                 }
             }
@@ -158,6 +251,32 @@
                 }
             }
         },
+        "Deployable": {
+            "properties": {
+                "slug": {
+                    "type": "string"
+                },
+                "versions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DeployableVersion"
+                    }
+                }
+            }
+        },
+        "DeployableVersion": {
+            "properties": {
+                "version": {
+                    "type": "string"
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "item": "string"
+                    }
+                }
+            }
+        },
         "Server": {
             "properties": {
                 "slug": {
@@ -209,6 +328,11 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "sp_auth": {
+            "type": "basic"
         }
     }
 }

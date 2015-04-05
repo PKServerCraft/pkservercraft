@@ -1,13 +1,15 @@
 /*global require, process, console, setInterval, clearInterval */
 /*jslint plusplus: true */
 
+var settings = require('./lib/accessors/SettingsManager').settings;
+
 var Express = require('express');
 var stormpathExpressSdk = require('stormpath-sdk-express');
 var serverManager = require('./lib/ServerManager');
+var deployableManager = require('./lib/DeployableManager');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var cookieParser = require('cookie-parser');
-var settings = require('./lib/SettingsManager').settings;
 
 var SP_CONFIG = {
     appHref: process.env.STORMPATH_APP_HREF,
@@ -64,6 +66,14 @@ function main() {
 
         response.set('Content-Type', 'application/json').status(status).send(retVal);
     }
+
+    app.get(api_path + "/deployables", spMiddleware.authenticate, function (request, response) {
+        deployableManager.listDeployables().then(function (deployables) {
+            sendResponse(response, "deployables", "success", deployables);
+        }, function (error) {
+            sendError(response, error);
+        });
+    });
 
     app.get(api_path + "/servers", spMiddleware.authenticate, function (request, response) {
         serverManager.listServers().then(function (servers) {
