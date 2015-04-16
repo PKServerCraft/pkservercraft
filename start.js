@@ -1,7 +1,7 @@
 /*global require, process, console, setInterval, clearInterval */
 /*jslint plusplus: true */
 
-var settings = require('./lib/accessors/SettingsManager').settings;
+var settings = require('./lib/Settings').settings;
 
 var Express = require('express');
 var stormpathExpressSdk = require('stormpath-sdk-express');
