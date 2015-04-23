@@ -48,6 +48,7 @@ function main() {
 
     spMiddleware.attachDefaults(app);
     app.use(spMiddleware);
+    app.disable('etag');
 
     function sendResponse(response, type, message, object) {
         response.set('Content-Type', 'application/json').send(object);
