@@ -16,7 +16,7 @@ var SP_CONFIG = {
     apiKeyId: process.env.STORMPATH_API_KEY_ID,
     apiKeySecret: process.env.STORMPATH_API_KEY_SECRET,
     writeAccessTokenResponse: true,
-    allowedOrigins: ['http://www-dev.paulkimbrel.com', 'http://0.0.0.0:8080'],
+    allowedOrigins: ['http://www-dev.paulkimbrel.com'],
     tokenEndpoint: settings.CONTEXT_ROOT + "/oauth/token",
     logoutEndpoint: settings.CONTEXT_ROOT + "/logout",
     userCollectionEndpoint: settings.CONTEXT_ROOT + "/users",
@@ -86,6 +86,14 @@ function main() {
 
     app.get(api_path + "/servers/:slug", spMiddleware.authenticate, function (request, response) {
         serverManager.findServer(request.param("slug")).then(function (server) {
+            sendResponse(response, "server", "success", server);
+        }, function (error) {
+            sendError(response, error);
+        });
+    });
+    
+    app.post(api_path + "/servers/:slug", spMiddleware.authenticate, function (request, response) {
+        serverManager.startServer(request.param("slug")).then(function (server) {
             sendResponse(response, "server", "success", server);
         }, function (error) {
             sendError(response, error);
