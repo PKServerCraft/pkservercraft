@@ -16,7 +16,7 @@ var SP_CONFIG = {
     apiKeyId: process.env.STORMPATH_API_KEY_ID,
     apiKeySecret: process.env.STORMPATH_API_KEY_SECRET,
     writeAccessTokenResponse: true,
-    allowedOrigins: ['http://www-dev.paulkimbrel.com', 'http://localhost:9000'],
+    allowedOrigins: ['http://www-dev.paulkimbrel.com', 'http://0.0.0.0:8080'],
     tokenEndpoint: settings.CONTEXT_ROOT + "/oauth/token",
     logoutEndpoint: settings.CONTEXT_ROOT + "/logout",
     userCollectionEndpoint: settings.CONTEXT_ROOT + "/users",
