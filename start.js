@@ -93,7 +93,7 @@ function main() {
     });
     
     app.post(api_path + "/servers/:slug", spMiddleware.authenticate, function (request, response) {
-        serverManager.startServer(request.param("slug")).then(function (server) {
+        serverManager.createServer(request.param("slug")).then(function (server) {
             sendResponse(response, "server", "success", server);
         }, function (error) {
             sendError(response, error);
