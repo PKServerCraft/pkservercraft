@@ -68,6 +68,7 @@ function main() {
         response.set('Content-Type', 'application/json').status(status).send(retVal);
     }
 
+    // Retrieve ALL deployables
     app.get(api_path + "/deployables", spMiddleware.authenticate, function (request, response) {
         deployableManager.listDeployables().then(function (deployables) {
             sendResponse(response, "deployables", "success", deployables);
@@ -76,6 +77,12 @@ function main() {
         });
     });
 
+    // Delete deployable version
+    app.delete(api_path + "/deployables", spMiddleware.authenticate, function (request, response) {
+        sendError(response, "Unimplemented");
+    });
+    
+    // Get ALL servers
     app.get(api_path + "/servers", spMiddleware.authenticate, function (request, response) {
         serverManager.listServers().then(function (servers) {
             sendResponse(response, "servers", "success", servers);
@@ -84,6 +91,17 @@ function main() {
         });
     });
 
+    // ADD new server config
+    app.post(api_path + "/servers", spMiddleware.authenticate, function (request, response) {
+        sendError(response, "Unimplemented");
+    });
+
+    // UPDATE new server config
+    app.put(api_path + "/servers", spMiddleware.authenticate, function (request, response) {
+        sendError(response, "Unimplemented");
+    });
+
+    // Get ONE server
     app.get(api_path + "/servers/:slug", spMiddleware.authenticate, function (request, response) {
         serverManager.findServer(request.param("slug")).then(function (server) {
             sendResponse(response, "server", "success", server);
@@ -91,7 +109,8 @@ function main() {
             sendError(response, error);
         });
     });
-    
+
+    // Create a server
     app.post(api_path + "/servers/:slug", spMiddleware.authenticate, function (request, response) {
         serverManager.startServer(request.param("slug")).then(function (server) {
             sendResponse(response, "server", "success", server);
@@ -100,8 +119,13 @@ function main() {
         });
     });
     
+    // Destroy a server
+    app.delete(api_path + "/servers/:slug", spMiddleware.authenticate, function (request, response) {
+        sendError(response, {message:"Unimplemented"});
+    });
+    
 
-    app.listen(process.env.PORT || 8080);
+    app.listen(process.env.PORT || 9080);
 }
 
 main();
